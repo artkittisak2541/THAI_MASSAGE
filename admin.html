@@ -1,0 +1,1812 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FOR YOU THAI MASSAGE - Admin Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;500;600;700&family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #9f7aea;
+            --secondary-color: #b794f4;
+            --accent-color: #f6ad55;
+            --light-color: #faf5ff;
+            --dark-color: #2d3748;
+            --gray-color: #718096;
+            --success-color: #48bb78;
+            --danger-color: #f56565;
+            --warning-color: #ed8936;
+            --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --radius: 12px;
+            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Prompt', sans-serif;
+            line-height: 1.6;
+            color: var(--dark-color);
+            background-color: #f7fafc;
+            overflow-x: hidden;
+        }
+        
+        h1, h2, h3, h4, h5 {
+            font-family: 'Prompt', sans-serif;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Admin Header Navigation */
+        .admin-header-nav {
+            background: linear-gradient(to right, var(--dark-color), #2d3748);
+            color: white;
+            padding: 20px 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        .admin-header-nav .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .logo-icon {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.3rem;
+            box-shadow: 0 4px 10px rgba(159, 122, 234, 0.3);
+        }
+        
+        .logo-text {
+            font-family: 'Prompt', sans-serif;
+            font-weight: 700;
+            font-size: 1.8rem;
+            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .admin-nav-links {
+            display: flex;
+            gap: 20px;
+            list-style: none;
+        }
+        
+        .admin-nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s;
+            padding: 8px 16px;
+            border-radius: 6px;
+        }
+        
+        .admin-nav-links a:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        .admin-nav-links a.active {
+            background-color: var(--primary-color);
+        }
+        
+        .admin-logout-btn {
+            background-color: var(--danger-color);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        
+        .admin-logout-btn:hover {
+            background-color: #e53e3e;
+        }
+        
+        /* Admin Dashboard Styles */
+        .admin-dashboard {
+            padding: 40px 0;
+            background-color: #f7fafc;
+            min-height: calc(100vh - 80px);
+        }
+        
+        .admin-header {
+            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 25px;
+            border-radius: var(--radius);
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+        
+        .stat-card {
+            background-color: white;
+            border-radius: var(--radius);
+            padding: 25px;
+            box-shadow: var(--shadow);
+            text-align: center;
+            transition: all 0.3s;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+        
+        .admin-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .admin-tab {
+            padding: 12px 25px;
+            background: none;
+            border: none;
+            border-radius: 8px 8px 0 0;
+            font-family: 'Prompt', sans-serif;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            color: var(--gray-color);
+        }
+        
+        .admin-tab.active {
+            background-color: white;
+            color: var(--primary-color);
+            box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.05);
+            border-bottom: 3px solid var(--primary-color);
+        }
+        
+        .admin-tab:hover:not(.active) {
+            background-color: #f1f5f9;
+        }
+        
+        .admin-table-container {
+            background-color: white;
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            margin-bottom: 30px;
+            max-height: 600px;
+            overflow-y: auto;
+        }
+        
+        .admin-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 1000px;
+        }
+        
+        .admin-table th {
+            background-color: #f7fafc;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            color: var(--dark-color);
+            border-bottom: 2px solid #e2e8f0;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        
+        .admin-table td {
+            padding: 15px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .admin-table tr:hover {
+            background-color: #faf5ff;
+        }
+        
+        .status-badge {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+        
+        .status-confirmed {
+            background-color: rgba(72, 187, 120, 0.1);
+            color: var(--success-color);
+        }
+        
+        .status-pending {
+            background-color: rgba(237, 137, 54, 0.1);
+            color: var(--warning-color);
+        }
+        
+        .status-cancelled {
+            background-color: rgba(245, 101, 101, 0.1);
+            color: var(--danger-color);
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .btn-small {
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .btn-confirm {
+            background-color: var(--success-color);
+            color: white;
+        }
+        
+        .btn-confirm:hover {
+            background-color: #38a169;
+        }
+        
+        .btn-cancel {
+            background-color: var(--danger-color);
+            color: white;
+        }
+        
+        .btn-cancel:hover {
+            background-color: #e53e3e;
+        }
+        
+        .btn-edit {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .btn-edit:hover {
+            background-color: #805ad5;
+        }
+        
+        .btn-view {
+            background-color: var(--gray-color);
+            color: white;
+        }
+        
+        .btn-view:hover {
+            background-color: #4a5568;
+        }
+        
+        .booking-button {
+            background: linear-gradient(to right, var(--accent-color), #fbd38d);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            box-shadow: 0 4px 10px rgba(246, 173, 85, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border: none;
+            cursor: pointer;
+            font-family: 'Prompt', sans-serif;
+        }
+        
+        .booking-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(246, 173, 85, 0.4);
+        }
+        
+        .export-button {
+            background: linear-gradient(to right, var(--success-color), #68d391);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            box-shadow: 0 4px 10px rgba(72, 187, 120, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border: none;
+            cursor: pointer;
+            font-family: 'Prompt', sans-serif;
+            margin-left: 10px;
+        }
+        
+        .export-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(72, 187, 120, 0.4);
+        }
+        
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1100;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal.active {
+            display: flex;
+        }
+        
+        .modal-content {
+            background-color: white;
+            border-radius: var(--radius);
+            padding: 30px;
+            max-width: 600px;
+            width: 90%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            position: relative;
+            animation: modalFadeIn 0.3s ease-out;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--gray-color);
+            cursor: pointer;
+        }
+        
+        /* Notification Styles */
+        .notification {
+            position: fixed;
+            top: 100px;
+            right: 20px;
+            background-color: white;
+            border-radius: var(--radius);
+            padding: 20px;
+            box-shadow: var(--shadow);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            z-index: 1200;
+            transform: translateX(120%);
+            transition: transform 0.5s ease;
+            max-width: 350px;
+            border-left: 4px solid var(--success-color);
+        }
+        
+        .notification.active {
+            transform: translateX(0);
+        }
+        
+        .notification-icon {
+            background: linear-gradient(to right, var(--success-color), #68d391);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+        
+        /* Form Styles */
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 500;
+            color: var(--dark-color);
+        }
+        
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 14px 18px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            font-family: 'Prompt', sans-serif;
+            font-size: 1rem;
+            transition: all 0.3s;
+            background-color: #f8fafc;
+        }
+        
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(159, 122, 234, 0.1);
+            background-color: white;
+        }
+        
+        .submit-button {
+            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+            color: white;
+            border: none;
+            padding: 16px 30px;
+            border-radius: 50px;
+            font-family: 'Prompt', sans-serif;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            width: 100%;
+            box-shadow: 0 4px 10px rgba(159, 122, 234, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .submit-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(159, 122, 234, 0.4);
+        }
+        
+        /* Service Management */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        .service-card {
+            background-color: white;
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            border: 1px solid #e2e8f0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.5s ease;
+        }
+        
+        .service-card:hover::before {
+            transform: scaleX(1);
+        }
+        
+        .service-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+        
+        .service-icon {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.2rem;
+        }
+        
+        .service-content {
+            padding: 25px;
+        }
+        
+        .service-content h3 {
+            font-size: 1.5rem;
+            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 15px;
+        }
+        
+        .price {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin: 15px 0;
+        }
+        
+        .duration {
+            color: var(--gray-color);
+            margin-bottom: 15px;
+        }
+        
+        /* Loading Animation */
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s, visibility 0.5s;
+        }
+        
+        .loading-screen.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+        
+        .loading-logo {
+            font-size: 3rem;
+            color: white;
+            margin-bottom: 20px;
+            animation: logoSpin 2s linear infinite;
+        }
+        
+        @keyframes logoSpin {
+            0% { transform: rotate(0); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .loading-text {
+            color: white;
+            font-size: 1.2rem;
+            margin-top: 20px;
+            font-family: 'Prompt', sans-serif;
+        }
+        
+        /* Responsive Styles */
+        @media (max-width: 992px) {
+            .admin-nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .admin-header-nav .container {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .admin-header {
+                flex-direction: column;
+                gap: 20px;
+                text-align: center;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .admin-tabs {
+                flex-direction: column;
+            }
+            
+            .admin-tab {
+                border-radius: 8px;
+                text-align: left;
+            }
+            
+            .admin-table-container {
+                overflow-x: auto;
+            }
+            
+            .admin-table {
+                min-width: 800px;
+            }
+            
+            .action-buttons {
+                flex-wrap: wrap;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .admin-dashboard {
+                padding: 20px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loading-logo">
+            <i class="fas fa-spa"></i>
+        </div>
+        <div class="loading-text">Admin Dashboard Loading...</div>
+    </div>
+    
+    <!-- Notification -->
+    <div class="notification" id="notification">
+        <div class="notification-icon">
+            <i class="fas fa-check"></i>
+        </div>
+        <div class="notification-content">
+            <h4 id="notificationTitle">Success</h4>
+            <p id="notificationMessage">Operation completed successfully</p>
+        </div>
+    </div>
+    
+    <!-- Modal for Details -->
+    <div class="modal" id="detailsModal">
+        <div class="modal-content">
+            <button class="modal-close" id="closeModal">&times;</button>
+            <h3 id="modalTitle">Details</h3>
+            <div id="modalContent">
+                <!-- Modal content will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Header Navigation -->
+    <div class="admin-header-nav">
+        <div class="container">
+            <div class="logo">
+                <div class="logo-icon"><i class="fas fa-user-shield"></i></div>
+                <div class="logo-text">FOR YOU ADMIN</div>
+            </div>
+            
+            <ul class="admin-nav-links">
+                <li><a href="#" class="active" data-admin-tab="dashboard">Dashboard</a></li>
+                <li><a href="#" data-admin-tab="bookings">Bookings</a></li>
+                <li><a href="#" data-admin-tab="customers">Customers</a></li>
+                <li><a href="#" data-admin-tab="services">Services</a></li>
+                <li><a href="#" data-admin-tab="reports">Reports</a></li>
+            </ul>
+            
+            <div>
+                <a href="index.html" class="admin-logout-btn" style="background-color: var(--primary-color); margin-right: 10px;">
+                    <i class="fas fa-home"></i> Main Site
+                </a>
+                <button class="admin-logout-btn" onclick="logoutAdmin()">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Admin Dashboard Content -->
+    <div class="admin-dashboard">
+        <div class="container">
+            <div class="admin-header">
+                <div>
+                    <h2>Admin Dashboard</h2>
+                    <p>FOR YOU THAI MASSAGE - Complete Booking Management System</p>
+                </div>
+                <div>
+                    <button class="booking-button" onclick="sendReminders()">
+                        <i class="fas fa-bell"></i> Send Notifications
+                    </button>
+                    <button class="export-button" onclick="exportData()">
+                        <i class="fas fa-download"></i> Export Data
+                    </button>
+                </div>
+            </div>
+            
+            <div class="stats-grid">
+                <div class="stat-card fade-in">
+                    <div class="stat-number" id="adminTotalBookings">0</div>
+                    <div>Total Bookings</div>
+                </div>
+                
+                <div class="stat-card fade-in stagger-delay-1">
+                    <div class="stat-number" id="adminTodayBookings">0</div>
+                    <div>Today's Bookings</div>
+                </div>
+                
+                <div class="stat-card fade-in stagger-delay-2">
+                    <div class="stat-number" id="adminPendingBookings">0</div>
+                    <div>Pending Confirmation</div>
+                </div>
+                
+                <div class="stat-card fade-in stagger-delay-3">
+                    <div class="stat-number" id="adminTotalRevenue">0</div>
+                    <div>Total Revenue (THB)</div>
+                </div>
+                
+                <div class="stat-card fade-in stagger-delay-4">
+                    <div class="stat-number" id="adminActiveCustomers">0</div>
+                    <div>Active Customers</div>
+                </div>
+                
+                <div class="stat-card fade-in stagger-delay-5">
+                    <div class="stat-number" id="adminMonthlyGrowth">0%</div>
+                    <div>Monthly Growth</div>
+                </div>
+            </div>
+            
+            <div class="admin-tabs">
+                <button class="admin-tab active" data-admin-tab-content="bookings">All Bookings</button>
+                <button class="admin-tab" data-admin-tab-content="today">Today's Bookings</button>
+                <button class="admin-tab" data-admin-tab-content="pending">Pending</button>
+                <button class="admin-tab" data-admin-tab-content="customers">Customers</button>
+                <button class="admin-tab" data-admin-tab-content="services">Services</button>
+                <button class="admin-tab" data-admin-tab-content="reports">Reports</button>
+            </div>
+            
+            <!-- All Bookings Panel -->
+            <div class="admin-table-container" id="adminBookingsTableContainer">
+                <table class="admin-table" id="adminBookingsTable">
+                    <thead>
+                        <tr>
+                            <th>Booking ID</th>
+                            <th>Customer</th>
+                            <th>Service</th>
+                            <th>Date/Time</th>
+                            <th>Price</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="adminBookingsTableBody">
+                        <!-- Bookings will be loaded here dynamically -->
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- Customers Panel (Hidden by default) -->
+            <div class="admin-table-container" id="adminCustomersPanel" style="display: none;">
+                <div style="padding: 20px; display: flex; justify-content: space-between; align-items: center;">
+                    <h3>Customer Management</h3>
+                    <button class="booking-button" onclick="exportCustomers()">
+                        <i class="fas fa-download"></i> Export Customers
+                    </button>
+                </div>
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Customer ID</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>Total Bookings</th>
+                            <th>Last Visit</th>
+                            <th>Total Spent</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="adminCustomersTableBody">
+                        <!-- Customers will be loaded here -->
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- Services Panel (Hidden by default) -->
+            <div id="adminServicesPanel" style="display: none;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+                    <h3>Service Management</h3>
+                    <button class="booking-button" onclick="showAddServiceModal()">
+                        <i class="fas fa-plus"></i> Add New Service
+                    </button>
+                </div>
+                <div class="services-grid" id="adminServicesGrid">
+                    <!-- Services will be loaded here -->
+                </div>
+            </div>
+            
+            <!-- Reports Panel (Hidden by default) -->
+            <div id="adminReportsPanel" style="display: none;">
+                <div style="background: white; border-radius: var(--radius); padding: 30px; box-shadow: var(--shadow); margin-bottom: 30px;">
+                    <h3>Reports Dashboard</h3>
+                    <p>Generate and download various reports for your business analysis.</p>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-top: 30px;">
+                        <div style="background: #f0f9ff; padding: 20px; border-radius: var(--radius);">
+                            <h4 style="color: var(--primary-color); margin-bottom: 10px;">Monthly Revenue Report</h4>
+                            <p>Detailed revenue breakdown by month</p>
+                            <button class="btn-small btn-edit" style="margin-top: 15px; width: 100%;" onclick="generateMonthlyReport()">
+                                <i class="fas fa-file-pdf"></i> Generate PDF
+                            </button>
+                        </div>
+                        
+                        <div style="background: #f0f9ff; padding: 20px; border-radius: var(--radius);">
+                            <h4 style="color: var(--primary-color); margin-bottom: 10px;">Customer Analytics</h4>
+                            <p>Customer behavior and preferences</p>
+                            <button class="btn-small btn-edit" style="margin-top: 15px; width: 100%;" onclick="generateCustomerReport()">
+                                <i class="fas fa-chart-bar"></i> Generate Report
+                            </button>
+                        </div>
+                        
+                        <div style="background: #f0f9ff; padding: 20px; border-radius: var(--radius);">
+                            <h4 style="color: var(--primary-color); margin-bottom: 10px;">Service Performance</h4>
+                            <p>Most popular services and ratings</p>
+                            <button class="btn-small btn-edit" style="margin-top: 15px; width: 100%;" onclick="generateServiceReport()">
+                                <i class="fas fa-chart-line"></i> Generate Report
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="background: white; border-radius: var(--radius); padding: 30px; box-shadow: var(--shadow);">
+                    <h3>Quick Stats</h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-top: 20px;">
+                        <div style="text-align: center;">
+                            <div style="font-size: 2rem; font-weight: bold; color: var(--primary-color);">65%</div>
+                            <div>Repeat Customers</div>
+                        </div>
+                        
+                        <div style="text-align: center;">
+                            <div style="font-size: 2rem; font-weight: bold; color: var(--success-color);">4.8</div>
+                            <div>Average Rating</div>
+                        </div>
+                        
+                        <div style="text-align: center;">
+                            <div style="font-size: 2rem; font-weight: bold; color: var(--accent-color);">78%</div>
+                            <div>Booking Fill Rate</div>
+                        </div>
+                        
+                        <div style="text-align: center;">
+                            <div style="font-size: 2rem; font-weight: bold; color: var(--warning-color);">22%</div>
+                            <div>Monthly Growth</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Loading Screen
+        const loadingScreen = document.getElementById('loadingScreen');
+        
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                loadingScreen.classList.add('hidden');
+            }, 1500);
+        });
+        
+        // Admin navigation tabs
+        const adminNavLinks = document.querySelectorAll('.admin-nav-links a');
+        const adminContentTabs = document.querySelectorAll('.admin-tab[data-admin-tab-content]');
+        
+        // Handle admin navigation
+        adminNavLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                
+                // Update active nav link
+                adminNavLinks.forEach(navLink => navLink.classList.remove('active'));
+                link.classList.add('active');
+                
+                // Get target tab
+                const targetTab = link.getAttribute('data-admin-tab');
+                showAdminTabContent(targetTab);
+            });
+        });
+        
+        // Handle admin content tabs
+        adminContentTabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                // Remove active class from all tabs
+                adminContentTabs.forEach(t => t.classList.remove('active'));
+                
+                // Add active class to clicked tab
+                tab.classList.add('active');
+                
+                // Get target content
+                const targetContent = tab.getAttribute('data-admin-tab-content');
+                showAdminTabContent(targetContent);
+            });
+        });
+        
+        // Function to show admin tab content
+        function showAdminTabContent(tabName) {
+            // Hide all panels
+            document.getElementById('adminBookingsTableContainer').style.display = 'none';
+            document.getElementById('adminCustomersPanel').style.display = 'none';
+            document.getElementById('adminServicesPanel').style.display = 'none';
+            document.getElementById('adminReportsPanel').style.display = 'none';
+            
+            // Show selected panel
+            switch(tabName) {
+                case 'dashboard':
+                case 'bookings':
+                case 'today':
+                case 'pending':
+                    document.getElementById('adminBookingsTableContainer').style.display = 'block';
+                    loadAdminBookingsTable(tabName);
+                    break;
+                case 'customers':
+                    document.getElementById('adminCustomersPanel').style.display = 'block';
+                    loadAdminCustomers();
+                    break;
+                case 'services':
+                    document.getElementById('adminServicesPanel').style.display = 'block';
+                    loadAdminServices();
+                    break;
+                case 'reports':
+                    document.getElementById('adminReportsPanel').style.display = 'block';
+                    break;
+            }
+        }
+        
+        // Function to load admin bookings table
+        function loadAdminBookingsTable(filter = 'bookings') {
+            const tableBody = document.getElementById('adminBookingsTableBody');
+            if (!tableBody) return;
+            
+            tableBody.innerHTML = '';
+            
+            // Get bookings from localStorage
+            let bookings = JSON.parse(localStorage.getItem('massageBookings')) || [];
+            
+            // Apply filter
+            let filteredBookings = [...bookings];
+            
+            switch(filter) {
+                case 'today':
+                    const today = new Date().toLocaleDateString('en-US');
+                    filteredBookings = bookings.filter(b => new Date(b.date).toLocaleDateString('en-US') === today);
+                    break;
+                case 'pending':
+                    filteredBookings = bookings.filter(b => b.status === 'pending');
+                    break;
+                // 'bookings' shows all bookings
+            }
+            
+            if (filteredBookings.length === 0) {
+                tableBody.innerHTML = `
+                    <tr>
+                        <td colspan="7" style="text-align: center; padding: 40px;">
+                            <i class="fas fa-calendar-times" style="font-size: 2rem; color: var(--gray-color); margin-bottom: 10px;"></i>
+                            <p>No booking data found</p>
+                            ${filter === 'today' ? '<p>No bookings scheduled for today</p>' : ''}
+                            ${filter === 'pending' ? '<p>No pending bookings to confirm</p>' : ''}
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            // Sort bookings by date (newest first)
+            filteredBookings.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+            
+            // Add bookings to table
+            filteredBookings.forEach(booking => {
+                // Calculate price based on service
+                let price = calculateServicePrice(booking.service);
+                
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${booking.id}</td>
+                    <td>
+                        <strong>${booking.name}</strong><br>
+                        <small>${booking.email}</small><br>
+                        <small>${booking.phone}</small>
+                    </td>
+                    <td>${booking.service}</td>
+                    <td>
+                        ${new Date(booking.date).toLocaleDateString('en-US')}<br>
+                        <strong>${booking.time}</strong>
+                    </td>
+                    <td>${price} THB</td>
+                    <td><span class="status-badge ${getStatusClass(booking.status)}">${getStatusText(booking.status)}</span></td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="btn-small btn-view" onclick="viewBookingDetails('${booking.id}')">
+                                <i class="fas fa-eye"></i> View
+                            </button>
+                            <button class="btn-small btn-confirm" onclick="confirmBooking('${booking.id}')" ${booking.status !== 'pending' ? 'disabled' : ''}>
+                                <i class="fas fa-check"></i> Confirm
+                            </button>
+                            <button class="btn-small btn-cancel" onclick="cancelBooking('${booking.id}')" ${booking.status === 'cancelled' ? 'disabled' : ''}>
+                                <i class="fas fa-times"></i> Cancel
+                            </button>
+                            <button class="btn-small btn-edit" onclick="contactCustomer('${booking.id}')">
+                                <i class="fas fa-envelope"></i> Contact
+                            </button>
+                        </div>
+                    </td>
+                `;
+                tableBody.appendChild(row);
+            });
+            
+            // Update stats after loading bookings
+            updateAdminStats();
+        }
+        
+        // Function to calculate service price
+        function calculateServicePrice(serviceName) {
+            if (serviceName.includes('850') || serviceName.includes('Traditional Thai Massage')) return 850;
+            if (serviceName.includes('700') || serviceName.includes('Aromatherapy Massage')) return 700;
+            if (serviceName.includes('650') || serviceName.includes('Thai Foot Massage')) return 650;
+            if (serviceName.includes('1,200') || serviceName.includes('Herbal Compress Massage')) return 1200;
+            if (serviceName.includes('950') || serviceName.includes('Back Pain Relief Massage')) return 950;
+            if (serviceName.includes('2,500') || serviceName.includes('Complete Herbal Massage Package')) return 2500;
+            return 1000; // Default
+        }
+        
+        // Function to load admin customers
+        function loadAdminCustomers() {
+            // Get bookings from localStorage
+            let bookings = JSON.parse(localStorage.getItem('massageBookings')) || [];
+            
+            // Extract unique customers
+            const customerMap = new Map();
+            
+            bookings.forEach(booking => {
+                if (!customerMap.has(booking.email)) {
+                    customerMap.set(booking.email, {
+                        name: booking.name,
+                        email: booking.email,
+                        phone: booking.phone,
+                        totalBookings: 1,
+                        lastVisit: new Date(booking.createdAt),
+                        totalSpent: calculateServicePrice(booking.service)
+                    });
+                } else {
+                    const customer = customerMap.get(booking.email);
+                    customer.totalBookings++;
+                    customer.totalSpent += calculateServicePrice(booking.service);
+                    
+                    const bookingDate = new Date(booking.createdAt);
+                    if (bookingDate > customer.lastVisit) {
+                        customer.lastVisit = bookingDate;
+                    }
+                }
+            });
+            
+            const customersTable = document.getElementById('adminCustomersTableBody');
+            if (!customersTable) return;
+            
+            customersTable.innerHTML = '';
+            
+            const customers = Array.from(customerMap.values());
+            
+            if (customers.length === 0) {
+                customersTable.innerHTML = `
+                    <tr>
+                        <td colspan="8" style="text-align: center; padding: 40px;">
+                            <i class="fas fa-users" style="font-size: 2rem; color: var(--gray-color); margin-bottom: 10px;"></i>
+                            <p>No customer data found</p>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            // Sort customers by last visit (newest first)
+            customers.sort((a, b) => b.lastVisit - a.lastVisit);
+            
+            // Add customers to table
+            customers.forEach((customer, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>CUST${String(index + 1).padStart(3, '0')}</td>
+                    <td><strong>${customer.name}</strong></td>
+                    <td>${customer.email}</td>
+                    <td>${customer.phone}</td>
+                    <td>${customer.totalBookings}</td>
+                    <td>${customer.lastVisit.toLocaleDateString('en-US')}</td>
+                    <td>${customer.totalSpent} THB</td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="btn-small btn-view" onclick="viewCustomerDetails('${customer.email}')">
+                                <i class="fas fa-eye"></i> View
+                            </button>
+                            <button class="btn-small btn-edit" onclick="contactCustomerByEmail('${customer.email}')">
+                                <i class="fas fa-envelope"></i> Email
+                            </button>
+                        </div>
+                    </td>
+                `;
+                customersTable.appendChild(row);
+            });
+        }
+        
+        // Function to load admin services
+        function loadAdminServices() {
+            const servicesGrid = document.getElementById('adminServicesGrid');
+            if (!servicesGrid) return;
+            
+            // Default services (could be loaded from localStorage or API)
+            const services = [
+                {
+                    id: 1,
+                    name: 'Traditional Thai Massage',
+                    description: 'Muscle relaxation massage with traditional Thai acupressure and stretching techniques. Helps relieve aches and pains and increase flexibility.',
+                    duration: '90 minutes',
+                    price: '850 THB',
+                    icon: 'fas fa-hands'
+                },
+                {
+                    id: 2,
+                    name: 'Aromatherapy Massage',
+                    description: 'Relaxing massage with natural essential oils. Helps stimulate blood circulation, relieve stress and restore energy.',
+                    duration: '60 minutes',
+                    price: '700 THB',
+                    icon: 'fas fa-leaf'
+                },
+                {
+                    id: 3,
+                    name: 'Thai Foot Massage',
+                    description: 'Foot massage for relaxation and stimulation of reflex points. Helps reduce stress, balance the body and promote overall health.',
+                    duration: '60 minutes',
+                    price: '650 THB',
+                    icon: 'fas fa-hot-tub'
+                },
+                {
+                    id: 4,
+                    name: 'Herbal Compress Massage',
+                    description: 'Massage with warm herbal compresses. Helps detoxify, reduce aches and pains, stimulate blood circulation and warm the body.',
+                    duration: '120 minutes',
+                    price: '1,200 THB',
+                    icon: 'fas fa-spa'
+                },
+                {
+                    id: 5,
+                    name: 'Back Pain Relief Massage',
+                    description: 'Specific point massage to relieve back, neck, shoulder and shoulder pain with Thai acupressure and stretching techniques.',
+                    duration: '90 minutes',
+                    price: '950 THB',
+                    icon: 'fas fa-user-injured'
+                },
+                {
+                    id: 6,
+                    name: 'Complete Herbal Massage Package',
+                    description: 'Special package including Thai massage, herbal compress massage and foot massage with herbal drink service.',
+                    duration: '180 minutes',
+                    price: '2,500 THB',
+                    icon: 'fas fa-crown'
+                }
+            ];
+            
+            servicesGrid.innerHTML = '';
+            
+            services.forEach((service) => {
+                const serviceCard = document.createElement('div');
+                serviceCard.className = 'service-card fade-in';
+                serviceCard.innerHTML = `
+                    <div class="service-icon">
+                        <i class="${service.icon}"></i>
+                    </div>
+                    <div class="service-content">
+                        <h3>${service.name}</h3>
+                        <p>${service.description}</p>
+                        <div class="duration">${service.duration}</div>
+                        <div class="price">${service.price}</div>
+                        <div style="display: flex; gap: 10px; margin-top: 15px;">
+                            <button class="btn-small btn-edit" style="flex: 1;" onclick="editService(${service.id})">
+                                <i class="fas fa-edit"></i> Edit
+                            </button>
+                            <button class="btn-small btn-cancel" style="flex: 1;" onclick="deleteService(${service.id})">
+                                <i class="fas fa-trash"></i> Delete
+                            </button>
+                        </div>
+                    </div>
+                `;
+                servicesGrid.appendChild(serviceCard);
+            });
+        }
+        
+        // Function to update admin stats
+        function updateAdminStats() {
+            // Get bookings from localStorage
+            let bookings = JSON.parse(localStorage.getItem('massageBookings')) || [];
+            
+            // Calculate stats
+            const totalBookings = bookings.length;
+            const today = new Date().toLocaleDateString('en-US');
+            const todayBookings = bookings.filter(b => new Date(b.date).toLocaleDateString('en-US') === today).length;
+            const pendingBookings = bookings.filter(b => b.status === 'pending').length;
+            
+            // Calculate total revenue
+            let totalRevenue = 0;
+            bookings.forEach(booking => {
+                if (booking.status === 'confirmed') {
+                    totalRevenue += calculateServicePrice(booking.service);
+                }
+            });
+            
+            // Calculate active customers (unique customers with bookings in last 30 days)
+            const thirtyDaysAgo = new Date();
+            thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+            
+            const recentBookings = bookings.filter(b => new Date(b.createdAt) > thirtyDaysAgo);
+            const uniqueCustomers = [...new Set(recentBookings.map(b => b.email))].length;
+            
+            // Calculate monthly growth (simplified - compare this month to last month)
+            const now = new Date();
+            const thisMonth = now.getMonth();
+            const thisYear = now.getFullYear();
+            
+            const thisMonthBookings = bookings.filter(b => {
+                const bookingDate = new Date(b.createdAt);
+                return bookingDate.getMonth() === thisMonth && bookingDate.getFullYear() === thisYear;
+            }).length;
+            
+            const lastMonthBookings = bookings.filter(b => {
+                const bookingDate = new Date(b.createdAt);
+                let lastMonth = thisMonth - 1;
+                let year = thisYear;
+                
+                if (lastMonth < 0) {
+                    lastMonth = 11;
+                    year = thisYear - 1;
+                }
+                
+                return bookingDate.getMonth() === lastMonth && bookingDate.getFullYear() === year;
+            }).length;
+            
+            const monthlyGrowth = lastMonthBookings > 0 ? 
+                Math.round(((thisMonthBookings - lastMonthBookings) / lastMonthBookings) * 100) : 
+                (thisMonthBookings > 0 ? 100 : 0);
+            
+            // Update stats
+            document.getElementById('adminTotalBookings').textContent = totalBookings;
+            document.getElementById('adminTodayBookings').textContent = todayBookings;
+            document.getElementById('adminPendingBookings').textContent = pendingBookings;
+            document.getElementById('adminTotalRevenue').textContent = totalRevenue.toLocaleString();
+            document.getElementById('adminActiveCustomers').textContent = uniqueCustomers;
+            document.getElementById('adminMonthlyGrowth').textContent = monthlyGrowth + '%';
+        }
+        
+        // Function to get status class
+        function getStatusClass(status) {
+            switch(status) {
+                case 'confirmed': return 'status-confirmed';
+                case 'pending': return 'status-pending';
+                case 'cancelled': return 'status-cancelled';
+                default: return 'status-pending';
+            }
+        }
+        
+        // Function to get status text
+        function getStatusText(status) {
+            switch(status) {
+                case 'confirmed': return 'Confirmed';
+                case 'pending': return 'Pending';
+                case 'cancelled': return 'Cancelled';
+                default: return 'Pending';
+            }
+        }
+        
+        // Function to view booking details
+        function viewBookingDetails(bookingId) {
+            // Get bookings from localStorage
+            let bookings = JSON.parse(localStorage.getItem('massageBookings')) || [];
+            
+            // Find booking
+            const booking = bookings.find(b => b.id === bookingId);
+            
+            if (booking) {
+                const modalTitle = document.getElementById('modalTitle');
+                const modalContent = document.getElementById('modalContent');
+                
+                modalTitle.textContent = `Booking Details - ${booking.id}`;
+                modalContent.innerHTML = `
+                    <div style="margin-bottom: 20px;">
+                        <p><strong>Booking ID:</strong> ${booking.id}</p>
+                        <p><strong>Customer Name:</strong> ${booking.name}</p>
+                        <p><strong>Phone Number:</strong> ${booking.phone}</p>
+                        <p><strong>Email:</strong> ${booking.email}</p>
+                    </div>
+                    
+                    <div style="margin-bottom: 20px;">
+                        <p><strong>Service:</strong> ${booking.service}</p>
+                        <p><strong>Date:</strong> ${new Date(booking.date).toLocaleDateString('en-US')}</p>
+                        <p><strong>Time:</strong> ${booking.time}</p>
+                        <p><strong>Status:</strong> <span class="status-badge ${getStatusClass(booking.status)}">${getStatusText(booking.status)}</span></p>
+                        <p><strong>Booked On:</strong> ${new Date(booking.createdAt).toLocaleString('en-US')}</p>
+                        <p><strong>Price:</strong> ${calculateServicePrice(booking.service)} THB</p>
+                    </div>
+                    
+                    ${booking.notes ? `<div style="margin-bottom: 20px;">
+                        <p><strong>Notes:</strong></p>
+                        <p style="background-color: #f7fafc; padding: 10px; border-radius: 6px;">${booking.notes}</p>
+                    </div>` : ''}
+                    
+                    <div style="display: flex; gap: 10px; margin-top: 20px;">
+                        <button class="btn-small btn-confirm" onclick="confirmBooking('${booking.id}')" ${booking.status !== 'pending' ? 'disabled' : ''}>
+                            <i class="fas fa-check"></i> Confirm Booking
+                        </button>
+                        <button class="btn-small btn-cancel" onclick="cancelBooking('${booking.id}')" ${booking.status === 'cancelled' ? 'disabled' : ''}>
+                            <i class="fas fa-times"></i> Cancel Booking
+                        </button>
+                        <button class="btn-small btn-edit" onclick="contactCustomer('${booking.id}')">
+                            <i class="fas fa-envelope"></i> Contact Customer
+                        </button>
+                    </div>
+                `;
+                
+                // Show modal
+                document.getElementById('detailsModal').classList.add('active');
+            }
+        }
+        
+        // Function to view customer details
+        function viewCustomerDetails(email) {
+            // Get bookings from localStorage
+            let bookings = JSON.parse(localStorage.getItem('massageBookings')) || [];
+            
+            // Filter bookings by customer email
+            const customerBookings = bookings.filter(b => b.email === email);
+            
+            if (customerBookings.length > 0) {
+                const customer = customerBookings[0];
+                const modalTitle = document.getElementById('modalTitle');
+                const modalContent = document.getElementById('modalContent');
+                
+                let bookingsHtml = '';
+                customerBookings.forEach(booking => {
+                    bookingsHtml += `
+                        <div style="margin-bottom: 15px; padding: 10px; background-color: #f7fafc; border-radius: 6px;">
+                            <p><strong>Booking ID:</strong> ${booking.id}</p>
+                            <p><strong>Service:</strong> ${booking.service}</p>
+                            <p><strong>Date:</strong> ${new Date(booking.date).toLocaleDateString('en-US')} at ${booking.time}</p>
+                            <p><strong>Status:</strong> <span class="status-badge ${getStatusClass(booking.status)}">${getStatusText(booking.status)}</span></p>
+                            <p><strong>Price:</strong> ${calculateServicePrice(booking.service)} THB</p>
+                        </div>
+                    `;
+                });
+                
+                // Calculate total spent
+                const totalSpent = customerBookings
+                    .filter(b => b.status === 'confirmed')
+                    .reduce((total, booking) => total + calculateServicePrice(booking.service), 0);
+                
+                modalTitle.textContent = `Customer Details - ${customer.name}`;
+                modalContent.innerHTML = `
+                    <div style="margin-bottom: 20px;">
+                        <p><strong>Customer Name:</strong> ${customer.name}</p>
+                        <p><strong>Email:</strong> ${customer.email}</p>
+                        <p><strong>Phone:</strong> ${customer.phone}</p>
+                        <p><strong>Total Bookings:</strong> ${customerBookings.length}</p>
+                        <p><strong>Confirmed Bookings:</strong> ${customerBookings.filter(b => b.status === 'confirmed').length}</p>
+                        <p><strong>Total Spent:</strong> ${totalSpent} THB</p>
+                        <p><strong>First Booking:</strong> ${new Date(customerBookings[customerBookings.length - 1].createdAt).toLocaleDateString('en-US')}</p>
+                        <p><strong>Last Booking:</strong> ${new Date(customerBookings[0].createdAt).toLocaleDateString('en-US')}</p>
+                    </div>
+                    
+                    <h4>Booking History</h4>
+                    ${bookingsHtml}
+                    
+                    <div style="display: flex; gap: 10px; margin-top: 20px;">
+                        <button class="btn-small btn-edit" onclick="contactCustomerByEmail('${customer.email}')">
+                            <i class="fas fa-envelope"></i> Email Customer
+                        </button>
+                        <button class="btn-small btn-edit" onclick="contactCustomerByPhone('${customer.phone}')">
+                            <i class="fas fa-phone"></i> Call Customer
+                        </button>
+                    </div>
+                `;
+                
+                // Show modal
+                document.getElementById('detailsModal').classList.add('active');
+            }
+        }
+        
+        // Function to confirm booking
+        function confirmBooking(bookingId) {
+            // Get bookings from localStorage
+            let bookings = JSON.parse(localStorage.getItem('massageBookings')) || [];
+            
+            // Find and update booking
+            const bookingIndex = bookings.findIndex(b => b.id === bookingId);
+            if (bookingIndex !== -1) {
+                bookings[bookingIndex].status = 'confirmed';
+                
+                // Save back to localStorage
+                localStorage.setItem('massageBookings', JSON.stringify(bookings));
+                
+                // Show notification
+                showNotification('Booking Confirmed', `Booking ID ${bookingId} has been confirmed.`);
+                
+                // Close modal
+                document.getElementById('detailsModal').classList.remove('active');
+                
+                // Reload bookings table
+                const activeTab = document.querySelector('.admin-tab.active').getAttribute('data-admin-tab-content');
+                loadAdminBookingsTable(activeTab);
+                
+                // Update stats
+                updateAdminStats();
+            }
+        }
+        
+        // Function to cancel booking
+        function cancelBooking(bookingId) {
+            if (confirm('Are you sure you want to cancel this booking?')) {
+                // Get bookings from localStorage
+                let bookings = JSON.parse(localStorage.getItem('massageBookings')) || [];
+                
+                // Find and update booking
+                const bookingIndex = bookings.findIndex(b => b.id === bookingId);
+                if (bookingIndex !== -1) {
+                    bookings[bookingIndex].status = 'cancelled';
+                    
+                    // Save back to localStorage
+                    localStorage.setItem('massageBookings', JSON.stringify(bookings));
+                    
+                    // Show notification
+                    showNotification('Booking Cancelled', `Booking ID ${bookingId} has been cancelled.`);
+                    
+                    // Close modal
+                    document.getElementById('detailsModal').classList.remove('active');
+                    
+                    // Reload bookings table
+                    const activeTab = document.querySelector('.admin-tab.active').getAttribute('data-admin-tab-content');
+                    loadAdminBookingsTable(activeTab);
+                    
+                    // Update stats
+                    updateAdminStats();
+                }
+            }
+        }
+        
+        // Function to contact customer
+        function contactCustomer(bookingId) {
+            // Get bookings from localStorage
+            let bookings = JSON.parse(localStorage.getItem('massageBookings')) || [];
+            
+            // Find booking
+            const booking = bookings.find(b => b.id === bookingId);
+            
+            if (booking) {
+                const modalTitle = document.getElementById('modalTitle');
+                const modalContent = document.getElementById('modalContent');
+                
+                modalTitle.textContent = `Contact Customer - ${booking.name}`;
+                modalContent.innerHTML = `
+                    <div style="margin-bottom: 20px;">
+                        <p><strong>Customer:</strong> ${booking.name}</p>
+                        <p><strong>Email:</strong> ${booking.email}</p>
+                        <p><strong>Phone:</strong> ${booking.phone}</p>
+                        <p><strong>Booking Reference:</strong> ${booking.id}</p>
+                        <p><strong>Service:</strong> ${booking.service}</p>
+                        <p><strong>Scheduled:</strong> ${new Date(booking.date).toLocaleDateString('en-US')} at ${booking.time}</p>
+                    </div>
+                    
+                    <form id="contactForm">
+                        <div class="form-group">
+                            <label for="contactSubject">Subject</label>
+                            <input type="text" id="contactSubject" value="Regarding your booking at FOR YOU THAI MASSAGE" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="contactMessage">Message</label>
+                            <textarea id="contactMessage" rows="5" required>Dear ${booking.name},\n\nRegarding your booking (${booking.id}) for ${booking.service} on ${new Date(booking.date).toLocaleDateString('en-US')} at ${booking.time}.\n\n</textarea>
+                        </div>
+                        
+                        <div style="display: flex; gap: 10px; margin-top: 20px;">
+                            <button type="submit" class="btn-small btn-confirm" style="flex: 1;">
+                                <i class="fas fa-paper-plane"></i> Send Email
+                            </button>
+                            <button type="button" class="btn-small btn-edit" style="flex: 1;" onclick="window.location.href='tel:${booking.phone}'">
+                                <i class="fas fa-phone"></i> Call Now
+                            </button>
+                            <button type="button" class="btn-small" style="flex: 1; background-color: var(--gray-color); color: white;" onclick="document.getElementById('detailsModal').classList.remove('active')">
+                                <i class="fas fa-times"></i> Cancel
+                            </button>
+                        </div>
+                    </form>
+                `;
+                
+                // Handle form submission
+                setTimeout(() => {
+                    const form = document.getElementById('contactForm');
+                    if (form) {
+                        form.addEventListener('submit', (e) => {
+                            e.preventDefault();
+                            showNotification('Email Sent', `Email has been sent to ${booking.email}`);
+                            document.getElementById('detailsModal').classList.remove('active');
+                        });
+                    }
+                }, 100);
+                
+                // Show modal
+                document.getElementById('detailsModal').classList.add('active');
+            }
+        }
+        
+        // Function to contact customer by email
+        function contactCustomerByEmail(email) {
+            const modalTitle = document.getElementById('modalTitle');
+            const modalContent = document.getElementById('modalContent');
+            
+            modalTitle.textContent = `Send Email to Customer`;
+            modalContent.innerHTML = `
+                <div style="margin-bottom: 20px;">
+                    <p><strong>Recipient:</strong> ${email}</p>
+                </div>
+                
+                <form id="emailForm">
+                    <div class="form-group">
+                        <label for="emailSubject">Subject</label>
+                        <input type="text" id="emailSubject" value="Message from FOR YOU THAI MASSAGE" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="emailMessage">Message</label>
+                        <textarea id="emailMessage" rows="5" required>Dear valued customer,\n\n</textarea>
+                    </div>
+                    
+                    <div style="display: flex; gap: 10px; margin-top: 20px;">
+                        <button type="submit" class="btn-small btn-confirm" style="flex: 1;">
+                            <i class="fas fa-paper-plane"></i> Send Email
+                        </button>
+                        <button type="button" class="btn-small" style="flex: 1; background-color: var(--gray-color); color: white;" onclick="document.getElementById('detailsModal').classList.remove('active')">
+                            <i class="fas fa-times"></i> Cancel
+                        </button>
+                    </div>
+                </form>
+            `;
+            
+            // Handle form submission
+            setTimeout(() => {
+                const form = document.getElementById('emailForm');
+                if (form) {
+                    form.addEventListener('submit', (e) => {
+                        e.preventDefault();
+                        showNotification('Email Sent', `Email has been sent to ${email}`);
+                        document.getElementById('detailsModal').classList.remove('active');
+                    });
+                }
+            }, 100);
+            
+            // Show modal
+            document.getElementById('detailsModal').classList.add('active');
+        }
+        
+        // Function to contact customer by phone
+        function contactCustomerByPhone(phone) {
+            if (confirm(`Call customer at ${phone}?`)) {
+                window.location.href = `tel:${phone}`;
+            }
+        }
+        
+        // Function to edit service
+        function editService(serviceId) {
+            showNotification('Edit Service', `Editing service ID: ${serviceId}`);
+            // In a real app, this would open a form to edit the service
+        }
+        
+        // Function to delete service
+        function deleteService(serviceId) {
+            if (confirm('Are you sure you want to delete this service? This action cannot be undone.')) {
+                showNotification('Service Deleted', `Service ID: ${serviceId} has been deleted.`);
+                // In a real app, this would delete the service from the database
+                // Then reload the services
+                setTimeout(() => {
+                    loadAdminServices();
+                }, 1000);
+            }
+        }
+        
+        // Function to show add service modal
+        function showAddServiceModal() {
+            const modalTitle = document.getElementById('modalTitle');
+            const modalContent = document.getElementById('modalContent');
+            
+            modalTitle.textContent = 'Add New Service';
+            modalContent.innerHTML = `
+                <form id="addServiceForm">
+                    <div class="form-group">
+                        <label for="serviceName">Service Name *</label>
+                        <input type="text" id="serviceName" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="serviceDescription">Description *</label>
+                        <textarea id="serviceDescription" rows="3" required></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="serviceDuration">Duration (minutes) *</label>
+                        <input type="number" id="serviceDuration" required min="15" max="300">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="servicePrice">Price (THB) *</label>
+                        <input type="number" id="servicePrice" required min="100" step="50">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="serviceIcon">Icon Class (Font Awesome) *</label>
+                        <input type="text" id="serviceIcon" value="fas fa-spa" required>
+                        <small>e.g., fas fa-hands, fas fa-leaf, fas fa-spa</small>
+                    </div>
+                    
+                    <div style="display: flex; gap: 10px; margin-top: 20px;">
+                        <button type="submit" class="btn-small btn-confirm" style="flex: 1;">
+                            <i class="fas fa-plus"></i> Add Service
+                        </button>
+                        <button type="button" class="btn-small" style="flex: 1; background-color: var(--gray-color); color: white;" onclick="document.getElementById('detailsModal').classList.remove('active')">
+                            <i class="fas fa-times"></i> Cancel
+                        </button>
+                    </div>
+                </form>
+            `;
+            
+            // Handle form submission
+            setTimeout(() => {
+                const form = document.getElementById('addServiceForm');
+                if (form) {
+                    form.addEventListener('submit', (e) => {
+                        e.preventDefault();
+                        
+                        // In a real app, this would save the service to a database
+                        showNotification('Service Added', 'New service has been added successfully.');
+                        document.getElementById('detailsModal').classList.remove('active');
+                        
+                        // Reload services
+                        setTimeout(() => {
+                            loadAdminServices();
+                        }, 500);
+                    });
+                }
+            }, 100);
+            
+            // Show modal
+            document.getElementById('detailsModal').classList.add('active');
+        }
+        
+        // Function to send reminders
+        function sendReminders() {
+            // In a real app, this would send emails to customers with upcoming appointments
+            showNotification('Notifications Sent', 'Reminder emails have been sent to customers with appointments tomorrow.');
+        }
+        
+        // Function to export data
+        function exportData() {
+            // In a real app, this would export data to CSV or Excel
+            showNotification('Data Exported', 'All booking data has been exported to CSV file.');
+        }
+        
+        // Function to export customers
+        function exportCustomers() {
+            showNotification('Customers Exported', 'Customer data has been exported to CSV file.');
+        }
+        
+        // Function to generate monthly report
+        function generateMonthlyReport() {
+            showNotification('Report Generated', 'Monthly revenue report has been generated and downloaded.');
+        }
+        
+        // Function to generate customer report
+        function generateCustomerReport() {
+            showNotification('Report Generated', 'Customer analytics report has been generated.');
+        }
+        
+        // Function to generate service report
+        function generateServiceReport() {
+            showNotification('Report Generated', 'Service performance report has been generated.');
+        }
+        
+        // Function to logout from admin
+        function logoutAdmin() {
+            if (confirm('Are you sure you want to logout?')) {
+                // In a real app, this would clear session and redirect to login
+                window.location.href = 'index.html';
+            }
+        }
+        
+        // Notification functionality
+        const notification = document.getElementById('notification');
+        
+        function showNotification(title, message) {
+            if (!notification) return;
+            
+            document.getElementById('notificationTitle').textContent = title;
+            document.getElementById('notificationMessage').textContent = message;
+            
+            notification.classList.add('active');
+            
+            setTimeout(() => {
+                notification.classList.remove('active');
+            }, 5000);
+        }
+        
+        // Modal close functionality
+        const modal = document.getElementById('detailsModal');
+        const closeModal = document.getElementById('closeModal');
+        
+        if (closeModal) {
+            closeModal.addEventListener('click', () => {
+                modal.classList.remove('active');
+            });
+        }
+        
+        window.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.classList.remove('active');
+            }
+        });
+        
+        // Initialize admin page
+        document.addEventListener('DOMContentLoaded', () => {
+            // Load initial data
+            updateAdminStats();
+            loadAdminBookingsTable();
+            
+            // Initialize animations
+            setTimeout(() => {
+                const observerOptions = {
+                    root: null,
+                    rootMargin: '0px',
+                    threshold: 0.1
+                };
+                
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('active');
+                        }
+                    });
+                }, observerOptions);
+                
+                document.querySelectorAll('.fade-in').forEach(el => {
+                    observer.observe(el);
+                });
+            }, 500);
+        });
+    </script>
+</body>
+</html>
